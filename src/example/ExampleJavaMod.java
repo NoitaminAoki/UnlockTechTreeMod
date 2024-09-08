@@ -10,7 +10,7 @@ import mindustry.ui.dialogs.BaseDialog;
 
 public class ExampleJavaMod extends Mod {
     @SuppressWarnings("unused")
-        public UnlockTechTreeMod() {
+        public ExampleJavaMod() {
                 Log.info("[UnlockTechTreeMod] Initializing...");
 
                         Events.on(EventType.ClientLoadEvent.class, e -> {
