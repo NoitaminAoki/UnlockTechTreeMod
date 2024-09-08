@@ -1,8 +1,8 @@
 #the mod name as displayed in-game
-displayName: "Java Mod Template"
+displayName: "Unlock Tech Tree Mod"
 
 #the internal name of your mod
-name: "example-java-mod"
+name: "unlock-tech-tree-mod"
 
 #your name
 author: "You"

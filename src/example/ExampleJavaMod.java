@@ -1,36 +1,53 @@
 package example;
 
-import arc.*;
-import arc.util.*;
-import mindustry.*;
-import mindustry.content.*;
-import mindustry.game.EventType.*;
-import mindustry.gen.*;
-import mindustry.mod.*;
-import mindustry.ui.dialogs.*;
+import arc.Events;
+import arc.util.Log;
+import mindustry.content.TechTree;
+import mindustry.ctype.UnlockableContent;
+import mindustry.game.EventType;
+import mindustry.mod.Mod;
+import mindustry.ui.dialogs.BaseDialog;
 
-public class ExampleJavaMod extends Mod{
+public class ExampleJavaMod extends Mod {
+    @SuppressWarnings("unused")
+        public UnlockTechTreeMod() {
+                Log.info("[UnlockTechTreeMod] Initializing...");
 
-    public ExampleJavaMod(){
-        Log.info("Loaded ExampleJavaMod constructor.");
+                        Events.on(EventType.ClientLoadEvent.class, e -> {
+                                    BaseDialog dialog = new BaseDialog("Confirmation");
+                                                dialog.cont.add("Please confirm that you want to unlock all research on the tech-tree").row();
+                                                            dialog.cont.button("Confirm", () -> {
+                                                                            dialog.hide();
 
-        //listen for game load event
-        Events.on(ClientLoadEvent.class, e -> {
-            //show dialog upon startup
-            Time.runTask(10f, () -> {
-                BaseDialog dialog = new BaseDialog("frog");
-                dialog.cont.add("behold").row();
-                //mod sprites are prefixed with the mod name (this mod is called 'example-java-mod' in its config)
-                dialog.cont.image(Core.atlas.find("example-java-mod-frog")).pad(20f).row();
-                dialog.cont.button("I see", dialog::hide).size(100f, 50f);
-                dialog.show();
-            });
-        });
-    }
+                                                                                            Log.info("[UnlockTechTreeMod] Unlocking tech-trees...");
 
-    @Override
-    public void loadContent(){
-        Log.info("Loading some example content.");
-    }
+                                                                                                            for (TechTree.TechNode node : TechTree.all) {
+                                                                                                                                UnlockableContent content = node.content;
+                                                                                                                                                    if (content.locked()) {
+                                                                                                                                                                            Log.info("[UnlockTechTreeMod] Unlocking content " + (content.name).replace("content", ""));
+                                                                                                                                                                                                    content.unlock();
+                                                                                                                                                                                                                        }
+                                                                                                                                                                                                                                        }
 
-}
+                                                                                                                                                                                                                                                        Log.info("[UnlockTechTreeMod] Successfully unlocked tech-trees");
+
+                                                                                                                                                                                                                                                                        BaseDialog dialog2 = new BaseDialog("Success");
+                                                                                                                                                                                                                                                                                        dialog2.cont.add("Successfully unlocked tech-trees").row();
+                                                                                                                                                                                                                                                                                                        dialog2.cont.add("Make sure to disable the mod to avoid seeing this dialogue again").row();
+                                                                                                                                                                                                                                                                                                                        dialog2.cont.button("Ok", dialog2::hide).size(150F, 50F);
+                                                                                                                                                                                                                                                                                                                                        dialog2.show();
+                                                                                                                                                                                                                                                                                                                                                    }).size(150F, 50F).row();
+
+                                                                                                                                                                                                                                                                                                                                                                dialog.cont.button("Cancel", () -> {
+                                                                                                                                                                                                                                                                                                                                                                                dialog.hide();
+
+                                                                                                                                                                                                                                                                                                                                                                                                BaseDialog dialog2 = new BaseDialog("Cancelled");
+                                                                                                                                                                                                                                                                                                                                                                                                                dialog2.cont.add("Cancelled unlocking tech-trees").row();
+                                                                                                                                                                                                                                                                                                                                                                                                                                dialog2.cont.add("Disable the mod if you do not want to see this dialogue again").row();
+                                                                                                                                                                                                                                                                                                                                                                                                                                                dialog2.cont.button("Ok", dialog2::hide).size(150F, 50F);
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                dialog2.show();
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            }).size(150F, 50F);
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        dialog.show();
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                });
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    }
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    }
